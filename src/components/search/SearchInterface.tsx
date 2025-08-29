@@ -9,7 +9,7 @@ import { useToast } from '@/lib/toast/context'
 import { debounce, truncate } from '@/lib/utils'
 import { SearchResult, VOD } from '@/types/database'
 import { Search } from 'lucide-react'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface SearchInterfaceProps {
   className?: string
@@ -68,7 +68,7 @@ export function SearchInterface({ className = '', selectedVodId, onVodSelect }: 
 
   // Debounced search function
   const performSearch = useCallback(
-    debounce(async (query: string, vodId?: number) => {
+    async (query: string, vodId?: number) => {
       if (!query.trim() || !user) {
         setSearchResults([])
         setSearchTime(null)
@@ -109,14 +109,20 @@ export function SearchInterface({ className = '', selectedVodId, onVodSelect }: 
       } finally {
         setLoading(false)
       }
-    }, 300),
+    },
     [user, addToast]
+  )
+
+  // Debounced version of performSearch
+  const debouncedPerformSearch = useMemo(
+    () => debounce(performSearch, 300),
+    [performSearch]
   )
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value
     setSearchQuery(query)
-    performSearch(query, selectedVodId)
+    debouncedPerformSearch(query, selectedVodId)
   }
 
   const handleResultClick = (result: SearchResultWithVod) => {

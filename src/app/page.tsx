@@ -1,48 +1,78 @@
-"use client"
+'use client';
 
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { Badge } from '@/components/ui/Badge';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import SpotlightHero from '@/components/ui/spotlight-hero';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { motion } from 'framer-motion';
 import {
+  Briefcase,
   Check,
   CreditCard,
+  Megaphone,
   Search,
   Shield,
   Sparkles,
   Star,
   Users,
   Video,
-  Zap
+  Youtube,
+  Zap,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
 
 // Dynamic import for Lottie animation component (lazy-loaded for performance)
-const HeroAnimation = dynamic(() => import('@/components/landing/HeroAnimation'), {
-  ssr: false,
-  loading: () => <div className="w-full max-w-7xl mx-auto h-[32rem] bg-white/5 rounded-lg animate-pulse" />
-});
+const HeroAnimation = dynamic(
+  () => import('@/components/landing/HeroAnimation'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full max-w-7xl mx-auto h-[32rem] bg-white/5 rounded-lg animate-pulse" />
+    ),
+  }
+);
 
 // Dynamic import for the timeline target animation component
-const TimelineTarget = dynamic(() => import('@/components/landing/ClaudeSonnet4RetardComponent'), {
-  ssr: false,
-  loading: () => <div className="w-full h-[300px] bg-white/5 rounded-lg animate-pulse" />
-});
+const TimelineTarget = dynamic(
+  () => import('@/components/landing/ClaudeSonnet4RetardComponent'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[300px] bg-white/5 rounded-lg animate-pulse" />
+    ),
+  }
+);
 
 // Dynamic import for VelocityScroll component
-const VelocityScroll = dynamic(() => import('@/components/ui/velocity-scroll').then(mod => ({ default: mod.VelocityScroll })), {
-  ssr: false,
-  loading: () => <div className="w-full h-32 bg-white/5 rounded-lg animate-pulse" />
-});
+const VelocityScroll = dynamic(
+  () =>
+    import('@/components/ui/velocity-scroll').then((mod) => ({
+      default: mod.VelocityScroll,
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-32 bg-white/5 rounded-lg animate-pulse" />
+    ),
+  }
+);
 
 export default function LandingPage() {
   const [frequency, setFrequency] = useState('monthly');
+  const PRICE_PRO = process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO;
+  const PRICE_STUDIO = process.env.NEXT_PUBLIC_STRIPE_PRICE_STUDIO;
 
   const plans = [
     {
@@ -53,7 +83,8 @@ export default function LandingPage() {
         monthly: 0,
         yearly: 0,
       },
-      description: 'Perfect for trying out Target Timeline with basic video search.',
+      description:
+        'Perfect for trying out Target Timeline with basic video search.',
       features: [
         '8 one-time processing credits',
         'Keyword search only',
@@ -71,7 +102,8 @@ export default function LandingPage() {
         monthly: 29,
         yearly: 24, // 20% off annually
       },
-      description: 'Everything you need to unlock the full power of AI-driven video search.',
+      description:
+        'Everything you need to unlock the full power of AI-driven video search.',
       features: [
         '40 monthly processing credits',
         'AI Summaries & Chapters',
@@ -91,7 +123,8 @@ export default function LandingPage() {
         monthly: 79,
         yearly: 63, // 20% off annually
       },
-      description: 'Built for teams and content creators who need maximum processing power.',
+      description:
+        'Built for teams and content creators who need maximum processing power.',
       features: [
         '150 monthly processing credits',
         'All Pro features included',
@@ -134,7 +167,7 @@ export default function LandingPage() {
       title: 'Credit-Based System',
       desc: 'Flexible processing credits - start with 8 free credits, each hour of video costs 1 credit.',
     },
-  ]
+  ];
 
   return (
     <PublicLayout>
@@ -142,12 +175,13 @@ export default function LandingPage() {
       <SpotlightHero />
 
       {/* Features Section */}
-      <motion.section 
+      <motion.section
+        id="features"
         className="relative py-20"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, margin: '-100px' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16 relative">
@@ -156,18 +190,20 @@ export default function LandingPage() {
                 Everything you need to find content
               </h2>
               <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-                Powerful search tools and smart features to help you discover and organize content across all platforms.
+                Powerful search tools and smart features to help you discover
+                and organize content across all platforms.
               </p>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="group relative p-6 rounded-xl border border-neutral-800 bg-neutral-900/50 hover:bg-neutral-900/80 transition-all duration-300 hover:border-neutral-700 hover:shadow-xl hover:shadow-white/10"
                 style={{
-                  boxShadow: '0 -20px 80px -20px rgba(255, 255, 255, 0.1) inset'
+                  boxShadow:
+                    '0 -20px 80px -20px rgba(255, 255, 255, 0.1) inset',
                 }}
               >
                 <BorderBeam size={250} duration={12} delay={index * 2} />
@@ -179,9 +215,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-white transition-colors">
                   {feature.title}
                 </h3>
-                <p className="text-gray-400 leading-relaxed">
-                  {feature.desc}
-                </p>
+                <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -189,12 +223,13 @@ export default function LandingPage() {
       </motion.section>
 
       {/* How It Works Section */}
-      <motion.section 
+      <motion.section
+        id="how-it-works"
         className="relative py-20 overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, margin: '-100px' }}
       >
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -210,7 +245,7 @@ export default function LandingPage() {
           <div className="relative">
             {/* Vertical line - connects all circles but stops at step 3 */}
             <div className="absolute left-8 top-0 h-80 w-px bg-gradient-to-b from-white/20 via-white/40 to-white/20"></div>
-            
+
             <div className="space-y-12">
               {/* Step 1 */}
               <div className="relative flex items-start">
@@ -222,7 +257,9 @@ export default function LandingPage() {
                     Upload Your Video
                   </h3>
                   <p className="text-gray-400 text-lg leading-relaxed">
-                    Paste a video URL or upload your file. We support most common video formats and streaming platforms including YouTube, Vimeo, and direct uploads.
+                    Paste a video URL or upload your file. We support most
+                    common video formats and streaming platforms including
+                    YouTube, Vimeo, and direct uploads.
                   </p>
                 </div>
               </div>
@@ -237,7 +274,9 @@ export default function LandingPage() {
                     Get Transcription
                   </h3>
                   <p className="text-gray-400 text-lg leading-relaxed">
-                    Our AI processes your video and creates accurate transcripts with precise timestamps. Each hour of video costs 1 processing credit.
+                    Our AI processes your video and creates accurate transcripts
+                    with precise timestamps. Each hour of video costs 1
+                    processing credit.
                   </p>
                 </div>
               </div>
@@ -252,7 +291,9 @@ export default function LandingPage() {
                     Search & Discover
                   </h3>
                   <p className="text-gray-400 text-lg leading-relaxed">
-                    Search through your transcripts to find exact moments, quotes, or topics instantly. Jump directly to any timestamp with one click.
+                    Search through your transcripts to find exact moments,
+                    quotes, or topics instantly. Jump directly to any timestamp
+                    with one click.
                   </p>
                 </div>
               </div>
@@ -264,13 +305,100 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
+      {/* Use Cases Section */}
+      <motion.section
+        id="use-cases"
+        className="relative py-20"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, margin: '-100px' }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Tailored For Your Workflow
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Designed to help creators, marketers, and teams move faster.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card
+              className="bg-neutral-900/50 border-neutral-800 hover:border-neutral-700 transition-colors"
+              style={{
+                boxShadow: '0 -20px 80px -20px rgba(255, 255, 255, 0.1) inset',
+              }}
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-white">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-neutral-800 text-white">
+                    <Youtube className="h-5 w-5 text-white" />
+                  </span>
+                  For Content Creators
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Stop manually scrubbing through hours of footage. Our AI finds
+                  viral moments, creates shareable clips, generates chapters for
+                  your timeline, and writes summaries for your video
+                  descriptions, saving you countless hours of editing.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card
+              className="bg-neutral-900/50 border-neutral-800 hover:border-neutral-700 transition-colors"
+              style={{
+                boxShadow: '0 -20px 80px -20px rgba(255, 255, 255, 0.1) inset',
+              }}
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-white">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-neutral-800 text-white">
+                    <Megaphone className="h-5 w-5 text-white" />
+                  </span>
+                  For Marketers
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Prove the ROI of your video campaigns. Instantly search
+                  transcripts for brand mentions, analyze sentiment, and
+                  pinpoint key messages to measure campaign effectiveness. Turn
+                  your video content into actionable data.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card
+              className="bg-neutral-900/50 border-neutral-800 hover:border-neutral-700 transition-colors"
+              style={{
+                boxShadow: '0 -20px 80px -20px rgba(255, 255, 255, 0.1) inset',
+              }}
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-white">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-neutral-800 text-white">
+                    <Briefcase className="h-5 w-5 text-white" />
+                  </span>
+                  For Businesses & Educators
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Make long training videos and meeting recordings instantly
+                  accessible. Our app makes your entire video library
+                  searchable, allowing your team to find specific topics in
+                  seconds. Turn your videos into a powerful knowledge base.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </motion.section>
+
       {/* Pricing Section */}
-      <motion.section 
+      <motion.section
+        id="pricing"
         className="relative py-20 overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, margin: '-100px' }}
       >
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center gap-8">
@@ -286,15 +414,13 @@ export default function LandingPage() {
                 Pick the perfect plan for your needs
               </h2>
               <p className="text-xl text-gray-400 max-w-md pt-2">
-                Simple, transparent pricing that scales with your business. No hidden fees, no surprises.
+                Simple, transparent pricing that scales with your business. No
+                hidden fees, no surprises.
               </p>
             </div>
 
             <div className="inline-block rounded-full p-1 shadow-sm bg-neutral-800/30">
-              <Tabs
-                defaultValue={frequency}
-                onValueChange={setFrequency}
-              >
+              <Tabs defaultValue={frequency} onValueChange={setFrequency}>
                 <TabsList className="bg-transparent">
                   <TabsTrigger
                     value="monthly"
@@ -320,10 +446,7 @@ export default function LandingPage() {
 
             <div className="mt-8 grid w-full max-w-6xl grid-cols-1 gap-6 lg:grid-cols-3">
               {plans.map((plan, index) => (
-                <div
-                  key={plan.id}
-                  className="flex"
-                >
+                <div key={plan.id} className="flex">
                   <Card
                     className={`relative h-full w-full text-left transition-all duration-300 hover:shadow-lg bg-neutral-900/50 ${
                       plan.popular
@@ -331,16 +454,16 @@ export default function LandingPage() {
                         : 'border-neutral-800 hover:border-white/30'
                     }`}
                     style={{
-                      boxShadow: plan.popular 
+                      boxShadow: plan.popular
                         ? '0 -20px 100px -20px rgba(255, 255, 255, 0.25) inset'
-                        : '0 -20px 80px -20px rgba(255, 255, 255, 0.1) inset'
+                        : '0 -20px 80px -20px rgba(255, 255, 255, 0.1) inset',
                     }}
                   >
                     {/* Add BorderBeam to Free and Studio cards only */}
                     {!plan.popular && (
                       <BorderBeam size={250} duration={15} delay={index * 3} />
                     )}
-                    
+
                     {plan.popular && (
                       <div className="absolute -top-3 right-0 left-0 mx-auto w-fit">
                         <Badge className="bg-white/90 text-black rounded-full px-4 py-1 shadow-sm">
@@ -349,7 +472,9 @@ export default function LandingPage() {
                         </Badge>
                       </div>
                     )}
-                    <CardHeader className={`pb-4 ${plan.popular ? 'pt-8' : ''}`}>
+                    <CardHeader
+                      className={`pb-4 ${plan.popular ? 'pt-8' : ''}`}
+                    >
                       <div className="flex items-center gap-2">
                         <div
                           className={`flex h-8 w-8 items-center justify-center rounded-full ${
@@ -369,19 +494,38 @@ export default function LandingPage() {
                         </CardTitle>
                       </div>
                       <CardDescription className="mt-3 space-y-2">
-                        <p className="text-sm text-gray-400">{plan.description}</p>
+                        <p className="text-sm text-gray-400">
+                          {plan.description}
+                        </p>
                         <div className="pt-2">
-                          {plan.price[frequency as keyof typeof plan.price] === 0 ? (
-                            <span className={`text-3xl font-bold ${plan.popular ? 'text-white' : 'text-white'}`}>
+                          {plan.price[frequency as keyof typeof plan.price] ===
+                          0 ? (
+                            <span
+                              className={`text-3xl font-bold ${
+                                plan.popular ? 'text-white' : 'text-white'
+                              }`}
+                            >
                               Free
                             </span>
                           ) : (
                             <div className="flex items-baseline">
-                              <span className={`text-3xl font-bold ${plan.popular ? 'text-white' : 'text-white'}`}>
-                                ${plan.price[frequency as keyof typeof plan.price]}
+                              <span
+                                className={`text-3xl font-bold ${
+                                  plan.popular ? 'text-white' : 'text-white'
+                                }`}
+                              >
+                                $
+                                {
+                                  plan.price[
+                                    frequency as keyof typeof plan.price
+                                  ]
+                                }
                               </span>
                               <span className="ml-1 text-sm text-gray-400">
-                                /month{frequency === 'yearly' ? ', billed yearly' : ''}
+                                /month
+                                {frequency === 'yearly'
+                                  ? ', billed yearly'
+                                  : ''}
                               </span>
                             </div>
                           )}
@@ -403,9 +547,7 @@ export default function LandingPage() {
                           >
                             <Check className="h-3.5 w-3.5" />
                           </div>
-                          <span className="text-gray-300">
-                            {feature}
-                          </span>
+                          <span className="text-gray-300">{feature}</span>
                         </div>
                       ))}
                     </CardContent>
@@ -418,6 +560,58 @@ export default function LandingPage() {
                               ? 'bg-white/90 text-black hover:bg-gray-100 hover:shadow-white/20 hover:shadow-md'
                               : 'border-white/30 text-white hover:bg-white/5 hover:text-white'
                           }`}
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            try {
+                              const selectedPriceId =
+                                plan.id === 'pro' ? PRICE_PRO : PRICE_STUDIO;
+                              if (!selectedPriceId) {
+                                console.error(
+                                  'Missing Stripe price id for plan',
+                                  plan.id
+                                );
+                                window.location.href = '/signup';
+                                return;
+                              }
+                              const res = await fetch(
+                                '/api/stripe/create-checkout-session',
+                                {
+                                  method: 'POST',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                  credentials: 'include',
+                                  body: JSON.stringify({
+                                    priceId: selectedPriceId,
+                                  }),
+                                }
+                              );
+                              if (res.status === 401) {
+                                try {
+                                  if (typeof window !== 'undefined') {
+                                    localStorage.setItem(
+                                      'pendingPriceId',
+                                      selectedPriceId || ''
+                                    );
+                                  }
+                                } catch {}
+                                window.location.href =
+                                  '/login?redirect=/#pricing';
+                                return;
+                              }
+                              const data = await res.json();
+                              if (data?.url) {
+                                window.location.href = data.url;
+                              } else {
+                                console.error(
+                                  'Stripe checkout URL not returned',
+                                  data
+                                );
+                              }
+                            } catch (err) {
+                              console.error('Failed to start checkout', err);
+                            }
+                          }}
                         >
                           {plan.cta}
                         </Button>
@@ -431,37 +625,150 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
+      {/* FAQ Section */}
+      <motion.section
+        id="faq"
+        className="relative py-20 overflow-hidden"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, margin: '-100px' }}
+      >
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-gray-400">Quick answers to common questions.</p>
+          </div>
+          {/* Using shadcn Accordion */}
+          <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4">
+            <div className="divide-y divide-neutral-800">
+              {/* Core Functionality */}
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  How accurate is the AI analysis?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  We leverage best‑in‑class transcription and AI models.
+                  Accuracy depends on audio quality and clarity, but you can
+                  expect strong results for typical content; you can always
+                  correct transcripts and re-run searches.
+                </div>
+              </details>
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  What can I search for within my videos?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  You can search across full transcripts, timestamps, chapters,
+                  and AI summaries to jump straight to key moments.
+                </div>
+              </details>
+              {/* Account & Onboarding */}
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  Is there a free trial?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  Yes. New accounts start with 8 processing credits so you can
+                  upload and test real videos without a credit card.
+                </div>
+              </details>
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  How do I verify my email after signing up?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  We send a secure verification link to your email after
+                  sign‑up. Click it to activate your account; if you don’t see
+                  it, check spam or resend from the login page.
+                </div>
+              </details>
+              {/* Technical Specifications */}
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  What video formats and sizes are supported?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  Common formats like MP4, MOV, and WebM are supported. File
+                  size and duration count toward credits; see plan limits for
+                  specifics.
+                </div>
+              </details>
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  How is my video data stored?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  Videos and transcripts are stored securely in our
+                  Supabase‑backed infrastructure with row‑level security and
+                  access controls.
+                </div>
+              </details>
+              {/* Billing & Subscriptions */}
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  How do I upgrade my plan?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  From the dashboard’s Billing page you can upgrade plans or buy
+                  extra credits. Changes apply immediately.
+                </div>
+              </details>
+              <details>
+                <summary className="cursor-pointer py-3 text-white font-medium">
+                  Can I cancel anytime?
+                </summary>
+                <div className="py-3 text-gray-400">
+                  Yes, you can cancel at any time from Billing. Your
+                  subscription remains active until the end of the current
+                  period.
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
       {/* CTA Section */}
-      <motion.section 
+      <motion.section
         className="relative py-24 overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, margin: '-100px' }}
       >
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            
             {/* VelocityScroll Text with extra spacing */}
             <div className="mb-12 mt-8">
-              <VelocityScroll 
-                text="Ready to Transform Your Video Search?" 
+              <VelocityScroll
+                text="Ready to Transform Your Video Search?"
                 default_velocity={3}
                 className="text-4xl md:text-5xl font-bold text-white"
               />
             </div>
-            
+
             <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of users who are already discovering content faster with our powerful video search platform.
+              Join thousands of users who are already discovering content faster
+              with our powerful video search platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link href="/signup">
-                <Button size="lg" className="px-10 py-4 text-lg font-semibold bg-white/90 text-black hover:bg-gray-100 transition-all duration-200">
+                <Button
+                  size="lg"
+                  className="px-10 py-4 text-lg font-semibold bg-white/90 text-black hover:bg-gray-100 transition-all duration-200"
+                >
                   Get Started Free
                 </Button>
               </Link>
               <Link href="/about">
-                <Button variant="outline" size="lg" className="px-10 py-4 text-lg font-semibold border-gray-600 text-white hover:bg-gray-800 hover:border-gray-500 transition-all duration-200">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="px-10 py-4 text-lg font-semibold border-gray-600 text-white hover:bg-gray-800 hover:border-gray-500 transition-all duration-200"
+                >
                   Learn More
                 </Button>
               </Link>
@@ -470,5 +777,5 @@ export default function LandingPage() {
         </div>
       </motion.section>
     </PublicLayout>
-  )
+  );
 }

@@ -1,13 +1,7 @@
-import * as Sentry from '@sentry/nextjs';
-
+// Temporarily disable Sentry instrumentation to resolve dev server hang on
+// "Compiling /instrumentation ...". Re-enable once stable.
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('../sentry.server.config');
-  }
-
-  if (process.env.NEXT_RUNTIME === 'edge') {
-    await import('../sentry.edge.config');
-  }
+  // no-op during development
 }
 
-export const onRequestError = Sentry.captureRequestError;
+export const onRequestError = () => {};

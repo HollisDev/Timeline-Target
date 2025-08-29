@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { AuthForm } from '@/components/auth/AuthForm'
+import { PasswordResetForm } from '@/components/auth/PasswordResetForm'
 import { GuestRoute } from '@/components/auth/ProtectedRoute'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -35,27 +36,29 @@ export default function LoginPage() {
 
   return (
     <GuestRoute>
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           {/* Logo */}
           <div className="flex justify-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+              <div className="w-8 h-8 bg-gradient-to-br from-[#5E6AD2] to-[#9B68E8] rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
+                  <circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+                  <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                  <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
               </div>
-              <span className="text-xl font-bold text-gray-900">VOD Search</span>
+              <span className="text-xl font-bold text-white">Timeline Target</span>
             </Link>
           </div>
 
           {/* Page Title */}
           <div className="mt-6 text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900">
+            <h2 className="text-3xl font-extrabold text-white">
               {getPageTitle()}
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-zinc-400">
               {getPageDescription()}
             </p>
           </div>
@@ -63,25 +66,33 @@ export default function LoginPage() {
 
         {/* Auth Form */}
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <AuthForm
-            mode={mode}
-            onSuccess={handleSuccess}
-            onModeChange={setMode}
-          />
+          <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6">
+            {mode === 'reset' ? (
+              <PasswordResetForm
+                onBack={() => setMode('signin')}
+              />
+            ) : (
+              <AuthForm
+                mode={mode as 'signin' | 'signup'}
+                onSuccess={handleSuccess}
+                onModeChange={setMode}
+              />
+            )}
+          </div>
         </div>
 
         {/* Footer Links */}
         <div className="mt-8 text-center">
-          <div className="text-sm text-gray-600 space-x-4">
-            <Link href="/terms" className="hover:text-gray-900">
+          <div className="text-sm text-zinc-400 space-x-4">
+            <Link href="/terms" className="hover:text-zinc-300 transition-colors">
               Terms of Service
             </Link>
             <span>•</span>
-            <Link href="/privacy" className="hover:text-gray-900">
+            <Link href="/privacy" className="hover:text-zinc-300 transition-colors">
               Privacy Policy
             </Link>
             <span>•</span>
-            <Link href="/help" className="hover:text-gray-900">
+            <Link href="/help" className="hover:text-zinc-300 transition-colors">
               Help
             </Link>
           </div>
@@ -90,7 +101,7 @@ export default function LoginPage() {
         {/* Demo Notice */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mt-4 max-w-md mx-auto">
-            <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+            <div className="bg-yellow-900/20 border border-yellow-700/50 rounded-md p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
@@ -98,10 +109,10 @@ export default function LoginPage() {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-yellow-800">
+                  <h3 className="text-sm font-medium text-yellow-400">
                     Development Mode
                   </h3>
-                  <div className="mt-2 text-sm text-yellow-700">
+                  <div className="mt-2 text-sm text-yellow-300">
                     <p>
                       This is a demo environment. Use any email and password to test the authentication flow.
                     </p>

@@ -6,6 +6,7 @@ import {
   LogOutIcon,
   MoreVerticalIcon,
   UserCircleIcon,
+  Loader,
 } from "lucide-react"
 
 import {
@@ -28,17 +29,52 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Skeleton } from "@/components/ui/skeleton"
+import Link from "next/link"
 
 export function NavUser({
   user,
+  loading,
 }: {
   user: {
     name: string
     email: string
     avatar: string
-  }
+  } | null;
+  loading: boolean;
 }) {
   const { isMobile } = useSidebar()
+
+  if (loading) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg">
+            <Skeleton className="h-8 w-8 rounded-lg" />
+            <div className="grid flex-1 gap-1">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-3 w-32" />
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    )
+  }
+
+  if (!user) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <Link href="/login" passHref>
+            <SidebarMenuButton size="lg">
+              <UserCircleIcon className="h-8 w-8" />
+              <span className="flex-1 text-left text-sm font-medium">Sign In</span>
+            </SidebarMenuButton>
+          </Link>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    )
+  }
 
   return (
     <SidebarMenu>
@@ -84,18 +120,24 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <UserCircleIcon />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon />
-                Notifications
-              </DropdownMenuItem>
+              <Link href="/dashboard/account">
+                <DropdownMenuItem>
+                  <UserCircleIcon />
+                  Account
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/dashboard/billing">
+                <DropdownMenuItem>
+                  <CreditCardIcon />
+                  Billing
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/dashboard/notifications">
+                <DropdownMenuItem>
+                  <BellIcon />
+                  Notifications
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
@@ -108,3 +150,4 @@ export function NavUser({
     </SidebarMenu>
   )
 }
+

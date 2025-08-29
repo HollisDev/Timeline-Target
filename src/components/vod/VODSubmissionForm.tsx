@@ -65,23 +65,16 @@ export function VODSubmissionForm({
     setLoading(true)
 
     try {
-      // Call the n8n webhook endpoint
-      const webhookUrl =
-        process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL ||
-        'http://localhost:5678/webhook/process-vod'
-
-      const response = await fetch(webhookUrl, {
+      // Call the server-side API route instead of direct webhook
+      const response = await fetch('/api/vod/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
         },
         body: JSON.stringify({
           vod_url: vodUrl.trim(),
           title: title.trim(),
           duration_hours: durationHours,
-          user_id: user.id,
-          jwt: session.access_token,
         }),
       })
 

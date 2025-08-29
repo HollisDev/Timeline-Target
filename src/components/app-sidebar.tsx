@@ -1,107 +1,109 @@
-"use client"
+'use client';
 
 import {
-    BarChart3,
-    Home,
-    Search,
-    Upload,
-    User,
-    Video
-} from "lucide-react"
-import Link from "next/link"
-import * as React from "react"
+  HelpCircleIcon,
+  LayoutDashboardIcon,
+  SearchIcon,
+  SettingsIcon,
+  StarIcon,
+  VideoIcon,
+} from 'lucide-react';
+import * as React from 'react';
 
+import { NavMain } from '@/components/nav-main';
+import { NavSecondary } from '@/components/nav-secondary';
+import { NavUser } from '@/components/nav-user';
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-} from "@/components/ui/sidebar"
-import { cn } from "@/lib/utils"
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar';
+import { useAuth } from '@/lib/auth/context';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const items = [
+const navMain = [
   {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: Home,
+    title: 'Dashboard',
+    url: '/dashboard',
+    icon: LayoutDashboardIcon,
   },
   {
-    title: "Search Videos",
-    url: "/search",
-    icon: Search,
+    title: 'My VODs',
+    url: '/dashboard/my-vods',
+    icon: VideoIcon,
   },
   {
-    title: "Upload Video",
-    url: "/dashboard",
-    icon: Upload,
+    title: 'Search',
+    url: '/dashboard/search',
+    icon: SearchIcon,
   },
   {
-    title: "My Videos",
-    url: "/dashboard",
-    icon: Video,
+    title: 'Watchlist',
+    url: '/dashboard/watchlist',
+    icon: StarIcon,
   },
-  {
-    title: "Analytics",
-    url: "/dashboard",
-    icon: BarChart3,
-  },
-]
+];
 
-export function AppSidebar({ variant = "sidebar", ...props }: React.ComponentProps<typeof Sidebar> & { variant?: "sidebar" | "floating" | "inset" }) {
+const navSecondary = [
+  {
+    title: 'Settings',
+    url: '/dashboard/settings',
+    icon: SettingsIcon,
+  },
+  {
+    title: 'Get Help',
+    url: '/dashboard/help',
+    icon: HelpCircleIcon,
+  },
+];
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, loading } = useAuth();
+
   return (
-    <Sidebar variant={variant} {...props}>
-      <SidebarHeader className="border-b border-sidebar-border p-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              src="/assets/images/timeline-target-logo.svg"
-              alt="Target Timeline"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold text-sidebar-foreground">
-              Target Timeline
-            </span>
-            <span className="text-xs text-sidebar-foreground/60">
-              Video Search Platform
-            </span>
-          </div>
-        </div>
-      </SidebarHeader>
-      <SidebarContent className="p-2">
-        <div className="space-y-1">
-          {items.map((item) => (
-            <Link
-              key={item.title}
-              href={item.url}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium",
-                "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                "transition-colors duration-200"
-              )}
+    <Sidebar collapsible="offcanvas" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="h-auto data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <item.icon className="h-4 w-4" />
-              <span>{item.title}</span>
-            </Link>
-          ))}
-        </div>
+              <Link href="/" className="flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-600 group-hover:ring-white transition-all duration-200">
+                  <Image
+                    src="/assets/images/timeline-target-logo.svg"
+                    alt="Timeline Target Logo"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-xl font-bold">Timeline Target</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={navMain} />
+        <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter className="border-t border-sidebar-border p-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center">
-            <User className="h-4 w-4 text-sidebar-accent-foreground" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-sidebar-foreground">
-              User Profile
-            </span>
-            <span className="text-xs text-sidebar-foreground/60">
-              Settings & Account
-            </span>
-          </div>
-        </div>
+      <SidebarFooter>
+        <NavUser
+          user={{
+            name: user?.email || 'Anonymous',
+            email: user?.email || 'No email',
+            avatar: '',
+          }}
+          loading={loading}
+        />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

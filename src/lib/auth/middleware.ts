@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ClientAuthService } from './client-service'
+import { AuthService } from './service'
 import { createError } from '@/types/errors'
 import { User } from '@supabase/supabase-js'
 

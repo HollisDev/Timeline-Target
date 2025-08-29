@@ -1,43 +1,67 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const path = require('path')
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
 
-module.exports = nextConfig
+const nextConfig = {
+  // Performance optimizations
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
+  // Prevent Next.js from tracing outside the project root (fixes slow/hanging builds)
+  outputFileTracingRoot: path.resolve(__dirname),
 
-// Injected content via Sentry wizard below
+  // Image optimization
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
 
-const { withSentryConfig } = require("@sentry/nextjs");
+  // Webpack optimizations
+  webpack: (config, { dev, isServer }) => {
+    if (!dev && !isServer) {
+      // Enable tree shaking and minification
+      config.optimization.minimize = true
 
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    // For all available options, see:
-    // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+      // Split chunks for better caching
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      }
+    }
 
+    return config
+  },
+}
+
+let exported = withBundleAnalyzer(nextConfig)
+
+// Only enable Sentry's webpack plugin in production to avoid dev hangs
+if (process.env.NODE_ENV === 'production') {
+  const { withSentryConfig } = require("@sentry/nextjs")
+  exported = withSentryConfig(exported, {
     org: "dev-xq",
     project: "dev",
-
-    // Only print logs for uploading source maps in CI
     silent: !process.env.CI,
-
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
     widenClientFileUpload: true,
-
-    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-    // This can increase your server load as well as your hosting bill.
-    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-    // side errors will fail.
     tunnelRoute: "/monitoring",
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
     disableLogger: true,
-
-    // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-    // See the following for more information:
-    // https://docs.sentry.io/product/crons/
-    // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-  }
-);
+  })
+}
+
+module.exports = exported

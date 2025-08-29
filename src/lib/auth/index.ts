@@ -1,83 +1,76 @@
 // Authentication module exports
 
 // Core service
-export { AuthService } from './service'
+export { AuthService } from './service';
 
 // Middleware and server utilities
 export {
-  withAuth,
-  requireServerAuth,
-  getServerAuth,
-  extractTokenFromRequest,
-  createAuthenticatedRequest,
-  checkRateLimit,
-  createAuthResponse,
-  createAuthErrorResponse,
-  validateSession,
   addCorsHeaders,
-  addSecurityHeaders
-} from './middleware'
+  addSecurityHeaders,
+  checkRateLimit,
+  createAuthErrorResponse,
+  createAuthResponse,
+  createAuthenticatedRequest,
+  extractTokenFromRequest,
+  getServerAuth,
+  requireServerAuth,
+  validateSession,
+  withAuth,
+} from './middleware';
 
 // Client-side context and hooks
 export {
   AuthProvider,
   useAuth,
-  useUser,
-  useSession,
   useAuthLoading,
   useIsAuthenticated,
-  useRequireAuth
-} from './context'
+  useRequireAuth,
+  useSession,
+  useUser,
+} from './context';
 
 export {
   useAuthForm,
   useRequireAuth as useRequireAuthHook,
   useRedirectIfAuthenticated,
   usePasswordValidation,
-  useSessionManagement,
-  useUserProfile,
-  useAuthPersistence,
-  useAuthError,
-  useEmailValidation
-} from './hooks'
+  useEmailValidation,
+} from './hooks';
 
 // Utilities
 export {
-  hasPermission,
-  isAdmin,
+  DEFAULT_PASSWORD_REQUIREMENTS,
   canAccessResource,
-  getUserDisplayName,
-  getUserAvatarUrl,
-  formatUserForAPI,
-  isSessionValid,
-  getSessionTimeRemaining,
-  formatSessionTimeRemaining,
-  validatePasswordRequirements,
-  generatePasswordStrengthScore,
-  isValidEmailDomain,
-  isDisposableEmail,
   checkRateLimit as checkAuthRateLimit,
-  sanitizeUserInput,
-  generateSecureToken,
-  hashString,
   createAuditLogEntry,
+  formatSessionTimeRemaining,
+  formatUserForAPI,
+  generatePasswordStrengthScore,
+  generateSecureToken,
+  getSessionTimeRemaining,
+  getUserAvatarUrl,
+  getUserDisplayName,
   handleAuthError,
-  DEFAULT_PASSWORD_REQUIREMENTS
-} from './utils'
+  hasPermission,
+  hashString,
+  isAdmin,
+  isDisposableEmail,
+  isSessionValid,
+  isValidEmailDomain,
+  sanitizeUserInput,
+  validatePasswordRequirements,
+} from './utils';
 
 // Types
 export type {
+  AuditLogEntry,
   PasswordRequirements,
   RateLimitConfig,
-  AuditLogEntry
-} from './utils'
+} from './utils';
 
-export type { AuthenticatedRequest } from './middleware'
+export type { AuthenticatedRequest } from './middleware';
 
 // Re-export commonly used types from other modules
-export type {
-  AuthUser,
-  AuthSession
-} from '@/types/api'
+export type { AuthSession, AuthUser } from '@/types/api';
 
-export type { User, Session } from '@supabase/supabase-js'
+export type { Session, User } from '@supabase/supabase-js';
